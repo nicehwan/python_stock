@@ -56,3 +56,26 @@ reg_tokens_alice = tokenizer.tokenize(doc_alice.lower())
 print('#Num of tokens with RegexpTokenizer:', len(reg_tokens_alice))
 print('#Token sample:')
 print(reg_tokens_alice[:20])
+
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+
+english_stops = set(stopwords.words('english')) # change the set datatype for not changeable
+
+result_alice = [word for word in reg_tokens_alice if word not in english_stops]
+
+print('#Num of tokens with stopwords:', len(result_alice))
+print('#Token sample:')
+print(result_alice[:20])
+
+alice_word_count = dict()
+for word in result_alice:
+    alice_word_count[word] = alice_word_count.get(word, 0) + 1
+
+print('#Num of used words:', len(alice_word_count))
+
+sorted_word_count = sorted(alice_word_count, key=alice_word_count.get, reverse=True)
+
+print("#Top 20 high frequency words:")
+for key in sorted_word_count[:20]:
+    print(f'{repr(key)}: {alice_word_count[key]}', end=', ')
