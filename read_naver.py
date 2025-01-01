@@ -24,10 +24,21 @@ driver.get(url)
 html = driver.page_source
 soup = BeautifulSoup(html, 'lxml')
 
-pgrr = soup.find('td', class_='pgRR')
-if pgrr and pgrr.a:
-    print(pgrr.a['href'])
-else:
-    print("Element not found")
+# pgrr = soup.find('td', class_='pgRR')
+# if pgrr and pgrr.a:
+#     # print(pgrr.a['href'])
+#     print(pgrr.prettify())
+# else:
+#     print("Element not found")
+
+with urlopen(url) as doc:
+    html = BeautifulSoup(doc, 'lxml')
+    pgrr = soup.find('td', class_='pgRR')
+    if pgrr and pgrr.a:
+        # print(pgrr.a['href'])
+        s = str(pgrr.a['href']).split('=')
+        last_page = s[-1]
+    else:
+        print("Element not found")
 
 driver.quit()
