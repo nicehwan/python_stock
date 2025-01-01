@@ -1,3 +1,4 @@
+import matplotlib
 import nltk
 
 nltk.download('gutenberg')
@@ -59,6 +60,7 @@ print(reg_tokens_alice[:20])
 
 from nltk.corpus import stopwords
 nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger_eng')
 
 english_stops = set(stopwords.words('english')) # change the set datatype for not changeable
 
@@ -79,3 +81,28 @@ sorted_word_count = sorted(alice_word_count, key=alice_word_count.get, reverse=T
 print("#Top 20 high frequency words:")
 for key in sorted_word_count[:20]:
     print(f'{repr(key)}: {alice_word_count[key]}', end=', ')
+
+my_tag_set = ['NN', 'VB', 'VBD', 'JJ']
+my_words = [word for word, tag in nltk.pos_tag(result_alice) if tag in my_tag_set]
+
+alice_word_count = dict()
+for word in my_words:
+    alice_word_count[word] = alice_word_count.get(word, 0) + 1
+
+print('#Num of used words:', len(alice_word_count))
+
+sorted_word_count = sorted(alice_word_count, key=alice_word_count.get, reverse=True)
+
+print("#Top 20 high frequency words:")
+for key in sorted_word_count[:20]:  # 빈도수 상위 20개의 단어를 출력
+    print(f'{repr(key)}: {alice_word_count[key]}', end=', ')
+
+import matplotlib.pyplot as plt
+#%matplotlib inline
+
+
+n = sorted_word_count[:20][::-1]    # 빈도수 상위 20개의 단어를 추출 후 역순 정렬
+w = [alice_word_count[key] for key in n]    # 20 개 단어에 대한 빈도
+plt.barh(range(len(n)), w, tick_label=n)
+plt.show()
+
